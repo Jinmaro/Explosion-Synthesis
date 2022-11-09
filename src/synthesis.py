@@ -19,11 +19,13 @@ def wav2feature(y):
 ## Fuction to load Model checkpoint
 def load_checkpoint(model_name="transformer"):
     if model_name == "transformer":         # load Transforemr
-        # state_dict = t.load('./chkpt/transformer_2000.pth.tar',map_location=t.device('cpu'))  
-        state_dict = t.load('./chkpt/transformer_2502_4000_256.pth.tar',map_location=t.device('cpu'))
-        # state_dict = t.load('./chkpt/transformer_3075_2000_256.pth.tar',map_location=t.device('cpu')) 
+        ## You can change Learned Model 
+        # state_dict = t.load('../chkpt/transformer_2000.pth.tar',map_location=t.device('cpu'))  
+        # state_dict = t.load('../chkpt/transformer_2502_4000_256.pth.tar',map_location=t.device('cpu'))
+        # state_dict = t.load('../chkpt/transformer_3075_2000_256.pth.tar',map_location=t.device('cpu'))
+        state_dict = t.load('../chkpt/transformer_3075_4000_256.pth.tar',map_location=t.device('cpu')) 
     else:                                   # load Postnet
-        state_dict = t.load('./chkpt/postnet_2000.pth.tar',map_location=t.device('cpu'))
+        state_dict = t.load('../chkpt/postnet_2000.pth.tar',map_location=t.device('cpu'))
     new_state_dict = OrderedDict()
     for k, value in state_dict['model'].items():
         key = k
