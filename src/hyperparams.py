@@ -1,5 +1,6 @@
 # Audio
 num_mels = 80
+n_mels = 80
 n_fft = 2048
 sr = 44100
 preemphasis = 0.97

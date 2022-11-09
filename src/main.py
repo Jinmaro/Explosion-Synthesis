@@ -1,7 +1,3 @@
-"""
-    マイクから入力された音声をその場で合成する
-    合成音の再生および、入力音声合成音の可視化も行う
-"""
 import os
 from audio_rec import rec
 from audio import load_wav, preprocess
@@ -12,36 +8,36 @@ import numpy as np
 
 def main():
     ## Path ##
-    result_path = "../result"                                        # 録音音声、合成音、波形画像等を格納するディレクトリ
-    num_file = str(sum(os.path.isfile                               # ファイル名
+    result_path = "../result"                                       # dir of result which contains recording voices, synthesized sounds, img of waves and specs
+    num_file = str(sum(os.path.isfile                               # file number
                        (os.path.join(result_path, name))
                         for name in os.listdir(result_path)) // 3)
-    rec_path = os.path.join(result_path, num_file + "_rec.wav")     # 録音音声のパス
-    out_path = os.path.join(result_path, num_file + "_out.wav")     # 合成音のパス
-    image_path = os.path.join(result_path, num_file + "_img.svg")   # 画像のパス
+    rec_path = os.path.join(result_path, num_file + "_rec.wav")     # file path of a recording voice
+    out_path = os.path.join(result_path, num_file + "_out.wav")     # file path of a synthesized sound
+    image_path = os.path.join(result_path, num_file + "_img.svg")   # file path of an img
 
     ## Rec ##
-    flag = rec(rec_path)            # 録音 （フラグはキー入力の有無）
+    flag = rec(rec_path)            # rec and get flag of a key event
 
     ## Load Rec Data ##
-    input_data = load_wav(rec_path) # 録音音声のロード
+    input_data = load_wav(rec_path) # load a recorded sound
 
     ## Preprocess for Input Data ##
-    input_data = preprocess(input_data, flag)   # 録音音声の前処理
+    input_data = preprocess(input_data, flag)   # preprocess of recorded sound
 
     ## Synthesis ##
-    output_data = synthesis(input_data)         # データを入力して、爆発音を合成
+    output_data = synthesis(input_data)         # get the output ( input an utterance and synthesize a sound of explosion)
 
     ## Adjusting Length ##
-    diff = len(input_data) - len(output_data)               # 音声と爆発音の長さの差分を取る
-    output_data = np.append(output_data, np.zeros(diff))    # 爆発音の後ろに差分の長さのゼロパディングを行う
+    diff = len(input_data) - len(output_data)               # get diff of length of an utterance and EXP
+    output_data = np.append(output_data, np.zeros(diff))    # zero padding at the end of a sound of explosion
 
     ## Result Plot and Save image ##
-    result_plot(image_path, input_data, output_data)    # 入力と出力の波形等の描画
+    result_plot(image_path, input_data, output_data)    # get img of waves and specs
 
     ## Save wavs ##
-    sf.write(rec_path, input_data,  44100, format="WAV", subtype="PCM_16")  # 録音音声の保存
-    sf.write(out_path, output_data, 44100, format="WAV", subtype="PCM_16")  # 爆発音の保存
+    sf.write(rec_path, input_data,  44100, format="WAV", subtype="PCM_16")  # save an utterance
+    sf.write(out_path, output_data, 44100, format="WAV", subtype="PCM_16")  # save exp
 
 if __name__ == "__main__":
     main()
