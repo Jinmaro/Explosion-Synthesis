@@ -14,39 +14,39 @@ def load_wav(load_path):
 
 ## Function to fade out
 def fade(y):
-    fade_rate = 0.15                            # 波形の何割の長さでフェードアウトさせるか
-    len_fader = int(len(y) * fade_rate)         # フェードアウトの長さ
-    fader = np.linspace(1.0, 0.0, len_fader)    # 1~0の階差数列
-    index = len(y) - len(fader)                 # フェードアウトし始めるインデックス
-    faded = y[index:] * fader                   # 得た位置から、階差数列をかけてフェードさせる
-    y = np.append(y[:index], faded)             # フェードさせる前の箇所と、フェードさせた後を繋げる
+    fade_rate = 0.15                            # 15 Percent of wave length
+    len_fader = int(len(y) * fade_rate)         # fade out length
+    fader = np.linspace(1.0, 0.0, len_fader)    # difference sequence of 1 -> 0 for fade out 
+    index = len(y) - len(fader)                 # index where fade out starts
+    faded = y[index:] * fader                   # fade out 
+    y = np.append(y[:index], faded)             # concatenate wave before fade out and wave which was faded out
     return y
 
 ## Function to calc index with RMS
 def get_start_index(sq, threshold, shift, length):
-    for i in range(0, len(sq), shift):  # shift分ずらしていき、lengthの範囲の値を足していく
-        total = 0
-        if i > len(sq) - length:        # i+length が配列の範囲を超えた場合
+    for i in range(0, len(sq), shift):  # 0 ~ len(sq)   += shift
+        total = 0                       # init total
+        if i > len(sq) - length:        # if i+length is out of range
             return i
-        total = np.sum(sq[i:i+length])  # i ~ i+length の範囲で合計値を算出
-        if total > threshold:           # 合計値が閾値を超えた場合
-            return i                    # そのインデックスを返す
+        total = np.sum(sq[i:i+length])  # calc sum of sq from i to i+length
+        if total > threshold:           # if sum is bigger than threshold
+            return i                    # return index
 
 ## RMS
 def rms(y):
-    shift = 256     # 移動幅
-    length = 1024   # 合計値を出す範囲
-    sq = y ** 2     # 波形の二乗
-    index = get_start_index(sq, 0.01, shift, length)    # 開始地点の取得
-    y = np.append(np.zeros(length), y[index:])          # 開始前に無音区間をつける
+    shift = 256     # shift length
+    length = 1024   # window length
+    sq = y ** 2     # square of wave
+    index = get_start_index(sq, 0.01, shift, length)    # get a start index
+    y = np.append(np.zeros(length), y[index:])          # put zero padding on a head of wave
     return y
 
 ## Preprocess for wav
 def preprocess(y, flag):
-    if flag:                    # ボタンを押して終了している場合
-        y = y[:len(y)-4410]     # キー入力の音をカット
-    y = fade(y)                 # 後ろをフェードアウトさせる
-    y = rms(y)                  # RMS を使用して、開始地点を揃える
+    if flag:                    # flag for the case of stopping with smashing ENTER key
+        y = y[:len(y)-4410]     # cut the sound of key input
+    y = fade(y)                 # fade out
+    y = rms(y)                  # adjust the head(start) index with RMS
     
     return y
 

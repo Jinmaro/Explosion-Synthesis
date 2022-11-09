@@ -12,7 +12,7 @@ import numpy as np
 
 def main():
     ## Path ##
-    result_path = "./result"                                        # 録音音声、合成音、波形画像等を格納するディレクトリ
+    result_path = "../result"                                        # 録音音声、合成音、波形画像等を格納するディレクトリ
     num_file = str(sum(os.path.isfile                               # ファイル名
                        (os.path.join(result_path, name))
                         for name in os.listdir(result_path)) // 3)
