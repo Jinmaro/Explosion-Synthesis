@@ -23,7 +23,8 @@ def load_checkpoint(model_name="transformer"):
         # state_dict = t.load('../chkpt/transformer_2000.pth.tar',map_location=t.device('cpu'))  
         # state_dict = t.load('../chkpt/transformer_2502_4000_256.pth.tar',map_location=t.device('cpu'))
         # state_dict = t.load('../chkpt/transformer_3075_2000_256.pth.tar',map_location=t.device('cpu'))
-        state_dict = t.load('../chkpt/transformer_3075_4000_256.pth.tar',map_location=t.device('cpu')) 
+        # state_dict = t.load('../chkpt/transformer_3075_4000_256.pth.tar',map_location=t.device('cpu')) 
+        state_dict = t.load('../chkpt/transformer_3575_4000_256.pth.tar',map_location=t.device('cpu')) 
     else:                                   # load Postnet
         state_dict = t.load('../chkpt/postnet_2000.pth.tar',map_location=t.device('cpu'))
     new_state_dict = OrderedDict()
